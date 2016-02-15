@@ -47,7 +47,7 @@ In your project's Gruntfile, add a section named `tags` to the data object passe
 
 #### options.scriptTemplate
 
-Type: `String`
+Type: `String` or `Function`
 
 Default value: `<script type="text/javascript" src="{{ path }}"></script>`
 
@@ -55,7 +55,7 @@ If a matched file has a `.js` extension, it will compile the `options.scriptTemp
 
 #### options.linkTemplate
 
-Type: `String`
+Type: `String` or `Function`
 
 Default value: `<link rel="stylesheet" type="text/css" href="{{ path }}"/>`
 

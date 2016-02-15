@@ -29,6 +29,23 @@ module.exports = function(grunt) {
                     'tests/build/**/*.css'
                 ],
                 dest: 'tests/results/indented-tags.html'
+            },
+            testFunctionTemplate: {
+                options: {
+                    scriptTemplate: function(path) {
+                      return '<script type="text/javascript" src="' + path + '" async></script>'
+                    },
+                    linkTemplate: function(path) {
+                      return '<link rel="stylesheet" type="text/css" href="../' + path + '"/>'
+                    },
+                    openTag: '<!-- start auto template tags -->',
+                    closeTag: '<!-- end auto template tags -->'
+                },
+                src: [
+                    'tests/build/**/*.js',
+                    'tests/build/**/*.css'
+                ],
+                dest: 'tests/results/function-template.html'
             }
         },
         copy: {
@@ -60,6 +77,7 @@ module.exports = function(grunt) {
         'copy:main',
         'tags:test',
         'tags:testIndenting',
+        'tags:testFunctionTemplate',
         'nodeunit',
         'clean'
     ]);

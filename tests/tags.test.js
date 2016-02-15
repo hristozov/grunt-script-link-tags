@@ -26,5 +26,12 @@ module.exports = {
         test.equal(expect, result, 'should process a tags, and match the indent of the tag comments');
 
         test.done();
+    },
+    functionTemplate: function (test) {
+        var expect = grunt.file.read('tests/expect/function-template.html');
+        var result = grunt.file.read('tests/results/function-template.html');
+        test.equal(expect, result, 'should process a tags task that uses function templates');
+
+        test.done();
     }
 };

@@ -11,12 +11,28 @@ module.exports = function (grunt) {
 
     /**
      * Normalize the files paths for window (\) and unix (/)
-     * 
+     *
      * @function normalizePaths
-     * @return {String} 
+     * @return {String}
      */
      function normalizePaths (path) {
         return path.replace(/\\/g, '/');
+     }
+
+     function processTemplate (template, path) {
+       if (typeof template === 'string') {
+         var data = {
+             data: {
+                 path: path
+             }
+         };
+         return grunt.template.process(template, data);
+       } else if (typeof template === 'function') {
+         var res = template(path);
+         return template(path);
+       } else {
+         return '';
+       }
      }
 
     /**
@@ -41,8 +57,12 @@ module.exports = function (grunt) {
         /**
          * @kludge should not have to hack around for templates
          */
-        processedOptions.scriptTemplate = processedOptions.scriptTemplate.replace('{{', '<%=').replace('}}', '%>');
-        processedOptions.linkTemplate = processedOptions.linkTemplate.replace('{{', '<%=').replace('}}', '%>');
+        if (typeof processedOptions.scriptTemplate === 'string') {
+            processedOptions.scriptTemplate = processedOptions.scriptTemplate.replace('{{', '<%=').replace('}}', '%>');
+        }
+        if (typeof processedOptions.linkTemplate === 'string') {
+            processedOptions.linkTemplate = processedOptions.linkTemplate.replace('{{', '<%=').replace('}}', '%>');
+        }
 
         /**
          * get the openTag line from content
@@ -117,16 +137,11 @@ module.exports = function (grunt) {
      */
     Tags.prototype.generateTag = function (relativePath) {
         var ext = path.extname(relativePath);
-        var data = {
-            data: {
-                path: relativePath
-            }
-        };
 
         if (ext === '.js') {
-            return grunt.template.process(this.options.scriptTemplate, data) + EOL;
+            return processTemplate(this.options.scriptTemplate, relativePath) + EOL;
         } else if (ext === '.css') {
-            return grunt.template.process(this.options.linkTemplate, data) + EOL;
+            return processTemplate(this.options.linkTemplate, relativePath) + EOL;
         } else {
             return ''
         }
